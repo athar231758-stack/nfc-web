@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Suite | NFC Digital Business Card Management</title>
+  <meta name="description" content="Complete management suite for your NFC Digital Business Card. Edit profile, add and remove links, manage leads CRM, customize themes, and track analytics in real time." />
+  <meta name="theme-color" content="#08090d" />
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/card.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body data-theme="obsidian">
+  <!-- Dynamic Glowing Background Orbs -->
+  <div class="bg-mesh-container">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+  </div>
+  <div class="bg-grid-overlay"></div>
+
+  <div class="admin-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-brand">
+        <div class="admin-logo">
+          <div class="admin-logo-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 8.32a7.43 7.43 0 0 1 0 7.36"/><path d="M9.46 6.21a11.76 11.76 0 0 1 0 11.58"/><path d="M12.91 4.1a15.91 15.91 0 0 1 0 15.8"/><path d="M16.37 2a20.16 20.16 0 0 1 0 20"/></svg>
+          </div>
+          <span>TapCard Pro</span>
+        </div>
+        <span class="badge badge-accent" style="font-size: 0.65rem;">ADMIN</span>
+      </div>
+
+      <!-- Navigation Items Container -->
+      <nav class="admin-nav" id="adminNav"></nav>
+
+      <!-- Sidebar Footer -->
+      <div class="admin-sidebar-footer">
+        <a href="card.html?preview=true" target="_blank" class="btn btn-secondary btn-sm" style="width: 100%;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+          <span>View Public Card</span>
+        </a>
+        <a href="index.html" class="btn btn-outline btn-sm" style="width: 100%;">
+          <span>Home / Landing Page</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div class="admin-sidebar-overlay" id="adminSidebarOverlay"></div>
+
+    <!-- Main Workspace -->
+    <main class="admin-main">
+      <!-- Admin Top Header -->
+      <header class="admin-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <button class="admin-hamburger-btn" id="adminSidebarToggle" title="Toggle Navigation Menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+          </button>
+          <div class="admin-header-title">
+            <h2>Admin Control Center</h2>
+            <span class="badge badge-glow" style="font-size: 0.7rem;">● LIVE SYNC ACTIVE</span>
+          </div>
+        </div>
+        <div class="admin-header-actions">
+          <button class="btn btn-secondary btn-sm" id="btnHeaderQr" onclick="CardApp.openShareModal(CardStore.getData())">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/></svg>
+            <span>Share & QR</span>
+          </button>
+          <a href="card.html?preview=true" target="_blank" class="btn btn-primary btn-sm">
+            <span>Open Live Card</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <button class="btn btn-secondary btn-sm" id="btnAdminProfile" onclick="AuthApp.openProfileModal()" style="display:inline-flex; align-items:center; gap:0.4rem;">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" id="adminHeaderAvatar" style="width:22px; height:22px; border-radius:50%; object-fit:cover;" alt="Admin" />
+            <span id="adminHeaderName">Admin Profile</span>
+          </button>
+          <button class="btn btn-outline btn-sm" id="btnAdminLogout" onclick="AuthStore.logout(); window.location.reload();" title="Log Out" style="color:#f87171; border-color:rgba(239,68,68,0.25);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+            <span>Logout</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Split Screen Workspace: Controls on left, Live Phone Mockup on right -->
+      <div class="admin-workspace">
+        <div class="admin-content-pane">
+
+          <!-- TAB 1: Profile & Bio -->
+          <div class="tab-pane active" id="tab-profile">
+            <div class="card-box">
+              <div class="card-box-header">
+                <div>
+                  <h3 class="card-box-title">👤 Profile Identity & Bio</h3>
+                  <div class="card-box-desc">Control what recipients see first when tapping your NFC smart card.</div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Full Name *</label>
+                <input type="text" class="form-input" id="profName" placeholder="e.g. Alexander Vance" />
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                  <label class="form-label">Job Title</label>
+                  <input type="text" class="form-input" id="profTitle" placeholder="e.g. Founder & Creative Technologist" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Company / Studio</label>
+                  <input type="text" class="form-input" id="profCompany" placeholder="e.g. Apex Design & Tech Labs" />
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                  <label class="form-label">Pronouns</label>
+                  <input type="text" class="form-input" id="profPronouns" placeholder="e.g. he/him" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Location / Base</label>
+                  <input type="text" class="form-input" id="profLocation" placeholder="e.g. San Francisco, CA & Remote" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Status Badge (Pill banner under avatar)</label>
+                <input type="text" class="form-input" id="profBadge" placeholder="e.g. 🚀 Open for Advisory & Keynotes" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Bio & Overview</label>
+                <textarea class="form-textarea" id="profBio" placeholder="Tell your story, achievements, and what you are building."></textarea>
+              </div>
+
+              <!-- Avatar Selection -->
+              <div class="form-group" style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                  <label class="form-label" style="margin-bottom: 0;">Avatar Photo</label>
+                  <label class="btn btn-secondary btn-sm" style="cursor: pointer; padding: 0.25rem 0.65rem; font-size: 0.75rem;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                    <span>Upload Image</span>
+                    <input type="file" id="uploadAvatarFile" accept="image/*" style="display: none;" />
+                  </label>
+                </div>
+                <input type="url" class="form-input" id="profAvatar" placeholder="https://... or click Upload / Preset below" />
+                <div class="avatar-preset-grid" id="avatarPresetGrid"></div>
+              </div>
+
+              <!-- Cover Banner Selection -->
+              <div class="form-group" style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                  <label class="form-label" style="margin-bottom: 0;">Cover Banner</label>
+                  <label class="btn btn-secondary btn-sm" style="cursor: pointer; padding: 0.25rem 0.65rem; font-size: 0.75rem;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                    <span>Upload Banner</span>
+                    <input type="file" id="uploadCoverFile" accept="image/*" style="display: none;" />
+                  </label>
+                </div>
+                <input type="url" class="form-input" id="profCover" placeholder="https://... or click Upload / Preset below" />
+                <div class="cover-preset-grid" id="coverPresetGrid"></div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem;">
+                <div class="form-group">
+                  <label class="form-label">NFC Card ID Label</label>
+                  <input type="text" class="form-input" id="profNfcId" placeholder="e.g. NFC-8849-VANC" />
+                </div>
+                <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding-top: 1.25rem;">
+                  <div>
+                    <div style="font-weight: 600; font-size: 0.9rem;">Verified Badge Checkmark</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">Displays verified badge on avatar</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="profVerified" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: Contact Details -->
+          <div class="tab-pane" id="tab-contact">
+            <div class="card-box">
+              <div class="card-box-header">
+                <div>
+                  <h3 class="card-box-title">📞 Contact Channels</h3>
+                  <div class="card-box-desc">These power the direct Call, Email, WhatsApp, and vCard address book download.</div>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                  <label class="form-label">Mobile Phone (Primary)</label>
+                  <input type="tel" class="form-input" id="contPhone" placeholder="+1 (555) 000-0000" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Work / Office Phone</label>
+                  <input type="tel" class="form-input" id="contWorkPhone" placeholder="+1 (555) 000-0000" />
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                  <label class="form-label">Email Address *</label>
+                  <input type="email" class="form-input" id="contEmail" placeholder="you@domain.com" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">WhatsApp Number or Link</label>
+                  <input type="text" class="form-input" id="contWhatsapp" placeholder="+14158902341 or https://wa.me/..." />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Website / Portfolio URL</label>
+                <input type="url" class="form-input" id="contWebsite" placeholder="https://yoursite.com" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Physical Office / Address (Shows in Google Maps & vCard)</label>
+                <input type="text" class="form-input" id="contAddress" placeholder="e.g. 550 Montgomery St, San Francisco, CA" />
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: Links & Socials -->
+          <div class="tab-pane" id="tab-links">
+            <div class="card-box">
+              <div class="card-box-header">
+                <div>
+                  <h3 class="card-box-title">🔗 Social Links & Channels</h3>
+                  <div class="card-box-desc">Add, reorder, edit, and toggle links. Track taps on each channel.</div>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="AdminApp.openNewLinkModal()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+                  <span>Add New Link</span>
+                </button>
+              </div>
+
+              <div class="admin-items-list" id="adminLinksList"></div>
+            </div>
+          </div>
+
+          <!-- TAB 4: Services & Offerings -->
+          <div class="tab-pane" id="tab-services">
+            <div class="card-box">
+              <div class="card-box-header">
+                <div>
+                  <h3 class="card-box-title">💼 Services & Advisory Packages</h3>
+                  <div class="card-box-desc">Display consulting packages, rates, or speaking offerings.</div>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="AdminApp.openNewServiceModal()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+                  <span>Add Service</span>
+                </button>
+              </div>
+
+              <div class="admin-items-list" id="adminServicesList"></div>
+            </div>
+          </div>
+
+          <!-- TAB 5: Portfolio Showcase -->
+          <div class="tab-pane" id="tab-portfolio">
+            <div class="card-box">
+              <div class="card-box-header">
+                <div>
+                  <h3 class="card-box-title">🎨 Featured Work & Portfolio</h3>
+                  <div class="card-box-desc">Showcase top case studies, apps, or design engineering projects.</div>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="AdminApp.openNewPortfolioModal()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+                  <span>Add Project</span>
+                </button>
+              </div>
+
+              <div class="admin-items-list" id="adminPortfolioList"></div>
+            </div>
+          </div>
+
+          <!-- TAB 6: Theme & Aesthetics -->
+          <div class="tab-pane" id="tab-theme">
+            <div class="card-box">
+              <div class="card-box-header">
+                <div>
+                  <h3 class="card-box-title">🌈 Themes & Aesthetics</h3>
+                  <div class="card-box-desc">One-click aesthetic presets crafted with glassmorphism and modern colors.</div>
+                </div>
+              </div>
+
+              <div class="theme-presets-grid" id="adminThemePresets"></div>
+
+              <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <div style="font-weight: 700;">Custom Brand Accent Color</div>
+                  <div style="font-size: 0.825rem; color: var(--text-muted);">Overrides glowing buttons, borders, and radar animations</div>
+                </div>
+                <input type="color" id="customAccentColor" style="width: 50px; height: 40px; border-radius: 8px; border: 1px solid var(--card-border); cursor: pointer; background: transparent;" />
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 7: Leads CRM Inbox -->
+          <div class="tab-pane" id="tab-leads">
+            <div class="card-box">
+              <div class="card-box-header">
+                <div>
+                  <h3 class="card-box-title">📬 Leads & Contact Exchanges</h3>
+                  <div class="card-box-desc">Instant CRM for anyone who tapped "Exchange Info" on your digital business card.</div>
+                </div>
+              </div>
+
+              <div id="adminLeadsTableContainer"></div>
+            </div>
+          </div>
+
+          <!-- TAB 8: Analytics & Insights -->
+          <div class="tab-pane" id="tab-analytics">
+            <div class="analytics-grid">
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </div>
+                <div class="stat-value" id="statViews">0</div>
+                <div class="stat-label">Total Card Taps / Views</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                </div>
+                <div class="stat-value" id="statDownloads">0</div>
+                <div class="stat-label">vCard Contacts Saved</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                </div>
+                <div class="stat-value" id="statClicks">0</div>
+                <div class="stat-label">Total Channel Clicks</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+                </div>
+                <div class="stat-value" id="statLeads">0</div>
+                <div class="stat-label">Leads Exchanged</div>
+              </div>
+            </div>
+
+            <div class="card-box">
+              <div class="card-box-header">
+                <h3 class="card-box-title">🏆 Top Performing Channels</h3>
+              </div>
+              <div id="topLinksRanking"></div>
+            </div>
+          </div>
+
+          <!-- TAB 9: NFC Tag & QR Studio -->
+          <div class="tab-pane" id="tab-nfc">
+
+            <!-- ─── SECTION 1: Smart Redirect QR ─── -->
+            <div class="card-box" style="margin-bottom: 1.5rem;">
+              <div class="card-box-header">
+                <div>
+                  <h3 class="card-box-title">🔗 Smart Redirect QR Code</h3>
+                  <div class="card-box-desc">Forward visitors who scan your QR code to any custom destination link — instantly and dynamically.</div>
+                </div>
+                <label class="toggle-switch" title="Enable redirect">
+                  <input type="checkbox" id="qrRedirectToggle" />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="qr-studio-split">
+                <!-- Left: QR Preview -->
+                <div class="qr-studio-preview-col">
+                  <div class="qr-preview-frame" id="smartQrPreview"></div>
+                  <div class="qr-permalink-box">
+                    <span class="qr-permalink-label" id="smartQrContentLabel">QR Target Destination</span>
+                    <code class="qr-permalink-url" id="smartQrPermalink">—</code>
+                  </div>
+                  <div style="display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center; margin-top:0.75rem;">
+                    <button class="btn btn-sm btn-secondary" id="btnCopySmartQrUrl">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                      Copy URL
+                    </button>
+                    <button class="btn btn-sm btn-primary" id="btnDownloadSmartQr">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                      Download PNG
+                    </button>
+                    <button class="btn btn-sm btn-outline" id="btnTestSmartQr" title="Test destination in new tab">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+                      Test Link
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Right: Redirect Controls -->
+                <div class="qr-studio-controls-col">
+                  <div class="qr-redirect-status" id="qrRedirectStatus">
+                    <span class="qr-redirect-dot" id="qrRedirectDot"></span>
+                    <span id="qrRedirectStatusText">Redirect: <strong>OFF</strong> — QR opens your card directly</span>
+                  </div>
+
+                  <div class="form-group" style="margin-top:1.25rem;">
+                    <label class="form-label" style="display:flex; justify-content:space-between; align-items:center;">
+                      <span>Redirect Destination URL</span>
+                      <span id="qrDestUrlStatus" style="font-size:0.75rem; color:var(--accent-primary); font-weight:normal;"></span>
+                    </label>
+                    <input type="text" class="form-input" id="qrRedirectDestInput" placeholder="https://your-portfolio.com or instagram.com/you" />
+                    <div style="font-size:0.78rem; color:var(--text-muted); margin-top:0.4rem;">
+                      Enter any link. If <code>https://</code> is omitted, it will be added automatically.
+                    </div>
+                    <!-- Quick Preset Links -->
+                    <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-top:0.5rem;" id="qrQuickPresets">
+                      <button type="button" class="btn btn-xs btn-outline qr-preset-chip" data-preset="https://linkedin.com">💼 LinkedIn</button>
+                      <button type="button" class="btn btn-xs btn-outline qr-preset-chip" data-preset="https://instagram.com">📸 Instagram</button>
+                      <button type="button" class="btn btn-xs btn-outline qr-preset-chip" data-preset="https://calendly.com">📅 Calendly</button>
+                      <button type="button" class="btn btn-xs btn-outline qr-preset-chip" data-preset="https://wa.me/14158902341">💬 WhatsApp</button>
+                      <button type="button" class="btn btn-xs btn-outline qr-preset-chip" data-preset="https://apextech.io">🌐 Portfolio</button>
+                    </div>
+                  </div>
+
+                  <!-- QR Generation Mode Selector -->
+                  <div class="form-group" style="margin-top:1rem; padding:0.85rem; background:rgba(255,255,255,0.02); border:1px solid var(--card-border); border-radius:var(--radius-md);">
+                    <label class="form-label" style="margin-bottom:0.4rem;">QR Code Forwarding Mode</label>
+                    <div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.82rem;">
+                      <label style="display:flex; align-items:flex-start; gap:0.5rem; cursor:pointer;">
+                        <input type="radio" name="qrModeRadio" value="smart" id="qrModeSmart" checked style="margin-top:2px;" />
+                        <div>
+                          <strong>⚡ Universal Dynamic QR (Recommended)</strong>
+                          <div style="font-size:0.75rem; color:var(--text-muted);">
+                            When redirect is ON, forwards ANY phone camera or external visitor directly to destination. When OFF, opens your card.
+                          </div>
+                        </div>
+                      </label>
+                      <label style="display:flex; align-items:flex-start; gap:0.5rem; cursor:pointer;">
+                        <input type="radio" name="qrModeRadio" value="fixed" id="qrModeFixed" style="margin-top:2px;" />
+                        <div>
+                          <strong>🔒 Fixed Permanent Card URL (Physical Tags)</strong>
+                          <div style="font-size:0.75rem; color:var(--text-muted);">
+                            QR image is permanent and encodes your <code>card.html?r=destination</code>. The redirect destination is baked into the QR — visitors are always forwarded, even on new devices.
+                          </div>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Public Card URL / Permalink Settings -->
+                  <div class="form-group" style="margin-top:0.75rem;">
+                    <label class="form-label" style="display:flex; justify-content:space-between; align-items:center;">
+                      <span>Public Card URL (Your Domain / Local IP)</span>
+                      <button type="button" class="btn btn-xs btn-secondary" id="btnAutoDetectCardUrl" style="padding:2px 8px; font-size:0.72rem;">Auto-Detect Current Host</button>
+                    </label>
+                    <input type="text" class="form-input" id="qrCardPermalinkInput" placeholder="http://localhost:5173/card.html or https://yourdomain.com/card.html" />
+                    <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.3rem;">
+                      For mobile phone scanning during local testing, enter your computer's local Wi-Fi IP (e.g. <code>http://192.168.x.x:5173/card.html</code>).
+                    </div>
+                  </div>
+
+                  <div style="display:flex; gap:0.6rem; margin-top:1rem;">
+                    <button class="btn btn-primary" id="btnSaveQrRedirect" style="flex:1;">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                      Save Redirect Settings
+                    </button>
+                    <a href="card.html?preview=true" target="_blank" class="btn btn-outline" style="white-space:nowrap;" title="View card without redirect">
+                      Preview Card
+                    </a>
+                  </div>
+
+                  <div class="qr-info-box" style="margin-top:1.25rem;">
+                    <h4>⚡ How Smart QR Works</h4>
+                    <ol>
+                      <li><strong>Toggle Redirect ON</strong> and specify your destination URL above.</li>
+                      <li><strong>Test instantly</strong> by clicking <em>Test Link</em> or scanning the QR code with your phone camera.</li>
+                      <li><strong>Toggle OFF</strong> anytime to immediately restore your standard NFC digital business card.</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ─── SECTION 2: Per-Card QR Manager ─── -->
+            <div class="card-box" style="margin-bottom: 1.5rem;">
+              <div class="card-box-header">
+                <div>
+                  <h3 class="card-box-title">🗂️ Per-Card QR Manager</h3>
+                  <div class="card-box-desc">Save a QR code for every link, campaign, or card you manage. Click any entry to preview its QR.</div>
+                </div>
+                <button class="btn btn-primary btn-sm" id="btnAddCardQr">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+                  Add Card QR
+                </button>
+              </div>
+
+              <!-- Add new card QR inline form (hidden by default) -->
+              <div class="qr-add-form" id="qrAddCardForm" style="display:none;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:0.75rem;">
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label">Label / Card Name</label>
+                    <input type="text" class="form-input" id="qrNewCardLabel" placeholder="e.g. Marketing Flyer" />
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label">Destination URL</label>
+                    <input type="url" class="form-input" id="qrNewCardUrl" placeholder="https://..." />
+                  </div>
+                </div>
+                <div style="display:flex; gap:0.6rem;">
+                  <button class="btn btn-primary btn-sm" id="btnSaveNewCardQr">Save Card QR</button>
+                  <button class="btn btn-secondary btn-sm" onclick="document.getElementById('qrAddCardForm').style.display='none'">Cancel</button>
+                </div>
+              </div>
+
+              <div id="cardQrList" style="margin-top:1.25rem; display:flex; flex-direction:column; gap:0.75rem;"></div>
+            </div>
+
+            <!-- ─── SECTION 3: QR Code Generator Tool ─── -->
+            <div class="card-box">
+              <div class="card-box-header">
+                <div>
+                  <h3 class="card-box-title">⚡ QR Code Generator</h3>
+                  <div class="card-box-desc">Generate a QR code for any URL or text instantly. Customize colors and download.</div>
+                </div>
+              </div>
+
+              <div class="qr-studio-split">
+                <!-- Left: Generator Preview -->
+                <div class="qr-studio-preview-col">
+                  <div class="qr-preview-frame" id="generatorQrPreview" style="background:#fff;"></div>
+                  <div style="display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center; margin-top:0.75rem;">
+                    <button class="btn btn-sm btn-primary" id="btnDownloadGeneratedQr">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                      Download PNG (1000×1000)
+                    </button>
+                    <button class="btn btn-sm btn-secondary" id="btnSaveGeneratedToCards">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/></svg>
+                      Save to Cards
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Right: Generator Options -->
+                <div class="qr-studio-controls-col">
+                  <div class="form-group">
+                    <label class="form-label">URL or Text to Encode</label>
+                    <input type="text" class="form-input" id="qrGenInput" placeholder="https://your-link.com or any text..." />
+                  </div>
+
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+                    <div class="form-group">
+                      <label class="form-label">QR Dark Color</label>
+                      <div style="display:flex; align-items:center; gap:0.5rem;">
+                        <input type="color" id="qrGenDark" value="#0a0d14" style="width:38px; height:38px; border:none; border-radius:6px; cursor:pointer; background:transparent;" />
+                        <input type="text" class="form-input" id="qrGenDarkHex" value="#0a0d14" style="font-family:var(--font-mono); font-size:0.8rem;" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">QR Light Color</label>
+                      <div style="display:flex; align-items:center; gap:0.5rem;">
+                        <input type="color" id="qrGenLight" value="#ffffff" style="width:38px; height:38px; border:none; border-radius:6px; cursor:pointer; background:transparent;" />
+                        <input type="text" class="form-input" id="qrGenLightHex" value="#ffffff" style="font-family:var(--font-mono); font-size:0.8rem;" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Error Correction Level</label>
+                    <select class="form-input" id="qrGenEcc">
+                      <option value="L">L — Low (7%)</option>
+                      <option value="M" selected>M — Medium (15%) — Recommended</option>
+                      <option value="Q">Q — Quartile (25%)</option>
+                      <option value="H">H — High (30%) — Best for logos</option>
+                    </select>
+                  </div>
+
+                  <button class="btn btn-primary" id="btnGenerateQr" style="width:100%;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    Generate QR Code
+                  </button>
+
+                  <!-- NFC Programming guide -->
+                  <div class="qr-info-box" style="margin-top:1.25rem;">
+                    <h4>📱 Program a Physical NFC Card</h4>
+                    <ol>
+                      <li>Download <strong>NFC Tools</strong> (iOS / Android) — free.</li>
+                      <li>Tap <strong>Write → Add a Record → Custom URL</strong>.</li>
+                      <li>Paste your QR permalink URL and tap <strong>Write</strong>.</li>
+                      <li>Hold your NFC card/badge to the back of your phone — done!</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+          <!-- TAB 10: Settings & Backup -->
+          <div class="tab-pane" id="tab-settings">
+            <div class="card-box">
+              <div class="card-box-header">
+                <div>
+                  <h3 class="card-box-title">⚙️ Security, Visibility & Data Backup</h3>
+                  <div class="card-box-desc">Control sections, update passcode, export full backups, or restore defaults.</div>
+                </div>
+              </div>
+
+              <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                <div>
+                  <div style="font-weight: 600; font-size: 0.95rem;">Show Services Section</div>
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">Toggle service offering cards on public profile</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="settShowServices" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); margin-top: 1rem;">
+                <div>
+                  <div style="font-weight: 600; font-size: 0.95rem;">Show Portfolio Section</div>
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">Toggle work showcase projects on public profile</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="settShowPortfolio" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="form-group" style="margin-top: 1.5rem;">
+                <label class="form-label">Admin Passcode Protection</label>
+                <div style="display: flex; gap: 0.75rem;">
+                  <input type="text" class="form-input" id="settPasscode" value="admin123" />
+                  <button class="btn btn-secondary" id="btnSavePasscode">Save Passcode</button>
+                </div>
+              </div>
+
+              <!-- Backup / Restore -->
+              <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+                <h4 style="margin-bottom: 0.5rem;">Backup & Cloud Sync</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                  Export all profile information, links, services, themes, and leads as a portable JSON file.
+                </p>
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                  <button class="btn btn-secondary btn-sm" id="btnExportJson">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                    <span>Export JSON Backup</span>
+                  </button>
+                  <label class="btn btn-secondary btn-sm" style="cursor: pointer;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                    <span>Import JSON Backup</span>
+                    <input type="file" id="inputImportJson" accept=".json" style="display: none;" />
+                  </label>
+                  <button class="btn btn-outline btn-sm" id="btnResetDemo" style="color: var(--ruby-rose); border-color: rgba(244, 63, 94, 0.3);">
+                    <span>Reset to Sample Defaults</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT PANE: Sticky Live Smartphone Simulator -->
+        <div class="admin-preview-pane">
+          <div class="phone-simulator-header">
+            <div class="phone-status-left">
+              <span class="nfc-pulse-dot"></span>
+              <span>LIVE SIMULATOR</span>
+            </div>
+            <div class="phone-status-right">
+              <span class="badge badge-accent" style="font-size: 0.65rem;">Auto-Sync</span>
+              <button class="btn btn-icon sm btn-secondary" id="btnPreviewRefresh" title="Refresh Live Simulator">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="phone-mockup-wrapper">
+            <!-- Dynamic Island Notch -->
+            <div class="phone-notch-bar">
+              <div class="phone-camera-lens"></div>
+              <div style="width: 12px; height: 12px; border-radius: 50%; background: #080a10;"></div>
+            </div>
+
+            <!-- Live Screen -->
+            <div class="phone-screen-frame" id="livePhonePreview"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/icons.js"></script>
+  <script src="js/qrcode-generator.js"></script>
+  <script src="js/vcard.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/card.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Route Guard: enforce admin authorization
+      if (typeof AuthStore !== 'undefined' && !AuthStore.checkAdminRouteGuard()) {
+        return; // blocked by admin gatekeeper
+      }
+
+      AdminApp.init();
+
+      // Populate admin profile avatar & name in header
+      if (typeof AuthStore !== 'undefined') {
+        const u = AuthStore.getCurrentUser();
+        if (u) {
+          const av = document.getElementById('adminHeaderAvatar');
+          const nm = document.getElementById('adminHeaderName');
+          if (av && u.avatar) av.src = u.avatar;
+          if (nm && u.name) nm.textContent = u.name.split(' ')[0] + ' (Admin)';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

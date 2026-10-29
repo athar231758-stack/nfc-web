@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Alexander Vance | NFC Digital Business Card</title>
+  <meta name="description" content="Tap to connect with Alexander Vance — Founder & Creative Technologist. Save contact directly to phone, exchange details, and explore projects." />
+  <meta name="theme-color" content="#08090d" />
+  <meta property="og:title" content="Alexander Vance | NFC Digital Business Card" />
+  <meta property="og:description" content="Tap to connect. Save contact directly to your phone via vCard, exchange info, and view links." />
+  <meta property="og:type" content="profile" />
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/card.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body data-theme="obsidian">
+  <!-- Dynamic Glowing Background Orbs -->
+  <div class="bg-mesh-container">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+  </div>
+  <div class="bg-grid-overlay"></div>
+
+  <!-- Subtle Floating Top Navigation -->
+  <div style="position: fixed; top: 12px; right: 12px; z-index: 9000; display: flex; gap: 8px;">
+    <a href="index.html" class="btn btn-xs btn-outline" style="background: rgba(8,9,13,0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 9999px; text-decoration: none;">
+      ← Home
+    </a>
+    <button class="btn btn-xs btn-secondary" onclick="AuthStore.isLoggedIn() ? AuthApp.openProfileModal() : AuthApp.openModal('login')" style="background: rgba(8,9,13,0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 9999px;">
+      Account
+    </button>
+  </div>
+
+  <!-- Main Card Page Container -->
+  <main class="card-page-wrapper">
+    <!-- Live Card Mount Element -->
+    <div id="cardApp"></div>
+  </main>
+
+  <!-- JavaScript Modules -->
+  <script src="js/icons.js"></script>
+  <script src="js/qrcode-generator.js"></script>
+  <script src="js/vcard.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/card.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // ── Smart QR Redirect ──
+      // If admin has enabled redirect, forward visitor immediately.
+      // This runs before any rendering so the experience is instant.
+      if (CardApp.checkSmartQrRedirect()) return;
+
+      // Track page view once upon load
+      CardStore.trackPageView();
+
+      function updateCardView() {
+        const data = CardStore.getData();
+        const p = data.profile || {};
+        if (p.name) {
+          document.title = `${p.name} | NFC Digital Business Card`;
+        }
+        CardApp.render(document.getElementById('cardApp'), false);
+      }
+
+      // Initial render
+      updateCardView();
+
+      // Re-render dynamically if storage changes in another window/tab
+      CardStore.subscribe(() => {
+        updateCardView();
+      });
+    });
+  </script>
+</body>
+</html>
